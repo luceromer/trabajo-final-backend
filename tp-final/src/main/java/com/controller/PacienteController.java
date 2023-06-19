@@ -1,6 +1,7 @@
 package com.controller;
 
-import com.model.Paciente;
+import com.model.PacienteDTO;
+import com.persistence.entities.Paciente;
 import com.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pacientes")
@@ -16,24 +18,24 @@ public class PacienteController {
 	private PacienteService pacienteService;
 	
 	@GetMapping()
-	public ResponseEntity<List<Paciente>> buscarTodos(){
+	public ResponseEntity<Optional<List<Paciente>>> buscarTodos(){
 		return ResponseEntity.ok(pacienteService.buscarTodos());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Paciente> buscar(@PathVariable Integer id) {
-		Paciente paciente = pacienteService.buscar(id).orElse(null);
+	public ResponseEntity<Optional<Paciente>> buscar(@PathVariable Integer id) {
+		Optional<Paciente> paciente = Optional.ofNullable(pacienteService.buscar(id).orElse(null));
 		return ResponseEntity.ok(paciente);
 	}
 	
 	@PostMapping()
-	public ResponseEntity<Paciente> registrarPaciente(@RequestBody Paciente paciente) {
+	public ResponseEntity<Optional<Paciente>> registrarPaciente(@RequestBody Paciente paciente) {
 		return ResponseEntity.ok(pacienteService.guardar(paciente));
 	}
 	
 	@PutMapping()
-	public ResponseEntity<Paciente> actualizar(@RequestBody Paciente paciente) {
-		ResponseEntity<Paciente> response = null;
+	public ResponseEntity<Optional<Paciente>> actualizar(@RequestBody Paciente paciente) {
+		ResponseEntity<Optional<Paciente>> response = null;
 		if (paciente.getId() != null && pacienteService.buscar(paciente.getId()).isPresent())
 			response = ResponseEntity.ok(pacienteService.actualizar(paciente));
 		else

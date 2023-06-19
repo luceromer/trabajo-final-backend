@@ -1,8 +1,8 @@
-package com.model;
-
-import java.time.LocalDate;
+package com.persistence.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table

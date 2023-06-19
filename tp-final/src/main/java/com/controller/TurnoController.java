@@ -1,7 +1,7 @@
 package com.controller;
 
-import com.model.Paciente;
-import com.model.Turno;
+import com.model.TurnoDTO;
+import com.persistence.entities.Turno;
 import com.service.OdontologoService;
 import com.service.PacienteService;
 import com.service.TurnoService;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/turnos")
@@ -24,19 +25,19 @@ public class TurnoController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<Turno>> buscarTodos() {
+	public ResponseEntity<Optional<List<Turno>>> buscarTodos() {
 		return ResponseEntity.ok(turnoService.listar());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Turno> buscar(@PathVariable Integer id) {
-		Turno turno = turnoService.buscar(id).orElse(null);
+	public ResponseEntity<Optional<Turno>> buscar(@PathVariable Integer id) {
+		Optional<Turno> turno = Optional.ofNullable(turnoService.buscar(id).orElse(null));
 		return ResponseEntity.ok(turno);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Turno> registrarTurno(@RequestBody Turno turno) {
-		ResponseEntity<Turno> respuesta;
+		public ResponseEntity<Optional<Turno>> registrarTurno(@RequestBody Turno turno) {
+		ResponseEntity<Optional<Turno>> respuesta;
 		if(pacienteService.buscar(turno.getPaciente().getId()) != null
 				&& odontologoService.buscar(turno.getOdontologo().getId()) != null){
 			respuesta = ResponseEntity.ok(turnoService.registrarTurno(turno));
@@ -47,8 +48,8 @@ public class TurnoController {
 	}
 	
 	@PutMapping()
-	public ResponseEntity<Turno> actualizar(@RequestBody Turno turno) {
-		ResponseEntity<Turno> response = null;
+	public ResponseEntity<Optional<Turno>> actualizar(@RequestBody Turno turno) {
+		ResponseEntity<Optional<Turno>> response = null;
 		if (turno.getId() != null && turnoService.buscar(turno.getId()).isPresent())
 			response = ResponseEntity.ok(turnoService.actualizar(turno));
 		else

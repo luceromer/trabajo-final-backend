@@ -2,43 +2,35 @@ package com.model;
 
 import java.util.Date;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table
-public class Paciente {
+public class PacienteDTO {
 	
-	@Id
-	@SequenceGenerator(name = "paciente_sequence", sequenceName = "paciente_sequence", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paciente_sequence")
+
 	private Integer id;
 	private String nombre;
 	private String apellido;
 	private String dni;
 	private Date fechaIngreso;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "domicilio_id")
-	private Domicilio domicilio;
+	private DomicilioDTO domicilioDTO;
 	
-	public Paciente() {
+	public PacienteDTO() {
 	}
 	
-	public Paciente(Integer id, String nombre, String apellido, String dni, Date fechaIngreso, Domicilio domicilio) {
+	public PacienteDTO(Integer id, String nombre, String apellido, String dni, Date fechaIngreso, DomicilioDTO domicilioDTO) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.fechaIngreso = fechaIngreso;
-		this.domicilio = domicilio;
+		this.domicilioDTO = domicilioDTO;
 	}
 	
-	public Paciente(String nombre, String apellido, String dni, Date fechaIngreso, Domicilio domicilio) {
+	public PacienteDTO(String nombre, String apellido, String dni, Date fechaIngreso, DomicilioDTO domicilioDTO) {
 		
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.fechaIngreso = fechaIngreso;
-		this.domicilio = domicilio;
+		this.domicilioDTO = domicilioDTO;
 	}
 	
 	
@@ -82,12 +74,12 @@ public class Paciente {
 		this.fechaIngreso = fechaIngreso;
 	}
 	
-	public Domicilio getDomicilio() {
-		return domicilio;
+	public DomicilioDTO getDomicilio() {
+		return domicilioDTO;
 	}
 	
-	public void setDomicilio(Domicilio domicilio) {
-		this.domicilio = domicilio;
+	public void setDomicilio(DomicilioDTO domicilioDTO) {
+		this.domicilioDTO = domicilioDTO;
 	}
 	
 	@Override
@@ -98,7 +90,7 @@ public class Paciente {
 				", apellido='" + apellido + '\'' +
 				", dni='" + dni + '\'' +
 				", fechaIngreso=" + fechaIngreso +
-				", domicilio=" + domicilio +
+				", domicilio=" + domicilioDTO +
 				'}';
 	}
 	

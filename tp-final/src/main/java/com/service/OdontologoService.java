@@ -1,7 +1,10 @@
 package com.service;
 
-import com.model.Odontologo;
+import com.model.OdontologoDTO;
+import com.persistence.entities.Odontologo;
+import com.persistence.repository.OdontologoRepository;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,37 +12,38 @@ import java.util.Optional;
 
 @Service
 	public class OdontologoService {
-		private IDao<Odontologo> odontologoDao;
-		Logger logger = Logger getLogger(OdontologoService.class);
+	
+	@Autowired
+	private OdontologoRepository odontologoRepository;
+	//	Logger logger = Logger.getLogger(OdontologoService.class);
+	
+	public OdontologoService()// {
+	{
+	
+	}
+	//logger.info("Se ha creado una instancia");
+	//	}
 		
-		public OdontologoService() {
-			odontologoDao = new OdontologoDaoH2();
-			logger.info("Se ha creado una instancia");
-		}
 		
-		public OdontologoService(IDao<Odontologo> odontologoDao) {
-			this.odontologoDao = odontologoDao;
-			logger.info("Se ha creado una instancia");
-		}
-		
-		public Odontologo registrarOdontologo(Odontologo odontologo) {
-			return odontologoDao.guardar(odontologo);
+		public Optional<Odontologo> registrarOdontologo(Odontologo odontologo) {
+			return odontologoRepository.guardar(odontologo);
 		}
 		
 		public void eliminar(Integer id) {
-			odontologoDao.eliminar(id);
+			odontologoRepository.eliminar(id);
 		}
 		
 		public Optional<Odontologo> buscar(Integer id) {
-			return odontologoDao.buscar(id);
+			return odontologoRepository.buscarPorId(id);
 		}
 		
-		public List<Odontologo> buscarTodos() {
-			return odontologoDao.buscarTodos();
+		public Optional<List<Odontologo>> buscarTodos() {
+			return odontologoRepository.buscarTodos();
 		}
 		
-		public Odontologo actualizar(Odontologo odontologo) {
-			return odontologoDao.actualizar(odontologo);
+		public Optional<Odontologo> actualizar(Odontologo odontologo) {
+			return odontologoRepository.
+					actualizar(odontologo);
 		}
 	}
 	

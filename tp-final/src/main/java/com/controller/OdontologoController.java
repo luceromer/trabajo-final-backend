@@ -1,6 +1,7 @@
 package com.controller;
 
-import com.model.Odontologo;
+import com.model.OdontologoDTO;
+import com.persistence.entities.Odontologo;
 import com.service.OdontologoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class OdontologoController {
 	private OdontologoService odontologoService;
 	
 	@GetMapping
-	public ResponseEntity<List<Odontologo>> buscarTodos(){
+	public ResponseEntity<Optional<List<Odontologo>>> buscarTodos(){
 		return ResponseEntity.ok(odontologoService.buscarTodos());
 	}
 	
@@ -30,14 +31,14 @@ public class OdontologoController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<Odontologo> registrarOdontologo(@RequestBody Odontologo odontologo) {
+	public ResponseEntity<Optional<Odontologo>> registrarOdontologo(@RequestBody Odontologo odontologo) {
 		return ResponseEntity.ok(odontologoService.registrarOdontologo(odontologo));
 	}
 	
 	
 	@PutMapping()
-	public ResponseEntity<Odontologo> actualizar(@RequestBody Odontologo odontologo) {
-		ResponseEntity<Odontologo> response = null;
+	public ResponseEntity<Optional<Odontologo>> actualizar(@RequestBody Odontologo odontologo) {
+		ResponseEntity<Optional<Odontologo>> response = null;
 		
 		if (odontologo.getId() != null && odontologoService.buscar(odontologo.getId()).isPresent())
 			response = ResponseEntity.ok(odontologoService.actualizar(odontologo));
