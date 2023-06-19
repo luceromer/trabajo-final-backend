@@ -2,10 +2,20 @@ package com.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table
 public class Turno {
-	
+	@Id
+	@SequenceGenerator(name = "turno_sequence", sequenceName = "turno_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "turno_sequence")
 	private Integer id;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "paciente_id")
 	private Paciente paciente;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "odontologo_id")
 	private Odontologo odontologo;
 	private LocalDate date;
 	

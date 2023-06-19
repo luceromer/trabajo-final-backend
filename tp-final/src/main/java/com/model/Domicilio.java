@@ -1,8 +1,15 @@
 package com.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table
 public class Domicilio {
 	
-		private Integer id;
+	@Id
+	@SequenceGenerator(name = "domicilio_sequence", sequenceName = "domicilio_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "domicilio_sequence")
+	private Integer id;
 		private String calle;
 		private String numero;
 		private String localidad;

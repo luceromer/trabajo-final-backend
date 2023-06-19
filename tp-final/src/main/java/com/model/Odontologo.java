@@ -1,7 +1,13 @@
 package com.model;
+import jakarta.persistence.*;
 
+@Entity
+@Table
 public class Odontologo {
 	
+	@Id
+	@SequenceGenerator(name = "odontologo_sequence", sequenceName = "odontologo_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "odontologo_sequence")
 		private Integer id;
 		private Integer numeroMatricula;
 		private String nombre;
