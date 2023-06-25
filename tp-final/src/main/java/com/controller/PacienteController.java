@@ -1,24 +1,22 @@
 package com.controller;
 
-import com.controller.exception.ResourceNotFoundException;
+import com.config.exception.ResourceNotFoundException;
 import com.model.PacienteDTO;
-import com.persistence.entities.Paciente;
 import com.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
 	@Autowired
 	private PacienteService pacienteService;
-	
+	private static final Logger logger = Logger.getLogger(PacienteController.class.getName());
 	@GetMapping()
 	public ResponseEntity<Set<PacienteDTO>> buscarTodos(){
 		return ResponseEntity.ok(pacienteService.listarPacientes());
@@ -27,13 +25,14 @@ public class PacienteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<PacienteDTO> buscar(@PathVariable Long id) throws ResourceNotFoundException {
 		PacienteDTO pacienteDTO = pacienteService.buscarPacientePorID(id);
+		logger.info(pacienteDTO.toString());
 		return ResponseEntity.ok(pacienteDTO);
 	}
 	
 	@PostMapping()
 	public ResponseEntity<String> registrarPaciente(@RequestBody PacienteDTO pacienteDTO) {
 		pacienteService.crearPaciente(pacienteDTO);
-		return ResponseEntity.ok("Paciente eliminado correctamente.");
+		return ResponseEntity.ok("Paciente registrado correctamente.");
 	}
 	
 	@PutMapping()

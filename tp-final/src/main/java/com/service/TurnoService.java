@@ -1,9 +1,6 @@
 package com.service;
-import com.controller.exception.ResourceNotFoundException;
-import com.model.OdontologoDTO;
+import com.config.exception.ResourceNotFoundException;
 import com.model.TurnoDTO;
-import com.persistence.entities.Odontologo;
-import com.persistence.entities.Paciente;
 import com.persistence.entities.Turno;
 import com.persistence.repository.OdontologoRepository;
 import com.persistence.repository.PacienteRepository;
@@ -12,10 +9,11 @@ import com.service.implementation.ITurnoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Service
 public class TurnoService implements ITurnoService {
@@ -28,6 +26,8 @@ public class TurnoService implements ITurnoService {
 	
 	@Autowired
 	private ModelMapper mapper;
+	
+	private static final Logger logger = Logger.getLogger(TurnoService.class.getName());
 	public TurnoService() {
 		this.turnoRepository = turnoRepository;
 	}
@@ -37,6 +37,7 @@ public class TurnoService implements ITurnoService {
 		Turno turno = mapper.map(turnoDTO, Turno.class);
 		if(pacienteRepository.existsById(turno.getPaciente().getId()) || odontologoRepository.existsById(turno.getOdontologo().getId())) {
 			turnoRepository.save(turno);
+			logger.info("Se ha creado el turno con el id " + turno.getId());
 		} else {
 			throw new ResourceNotFoundException("El paciente o el odontólogo no existen. Por favor cree primero los registros.");
 		}
@@ -67,7 +68,8 @@ public class TurnoService implements ITurnoService {
 	public void modificarTurno(TurnoDTO turnoDTO) throws ResourceNotFoundException {
 		if (turnoRepository.existsById(turnoDTO.getId())) {
 			Turno turno = mapper.map(turnoDTO, Turno.class);
-			turnoRepository.save(turno);}
+			turnoRepository.save(turno);
+			logger.info("Se ha modificado el turno con el id " + turno.getId());}
 		else {
 			throw new ResourceNotFoundException("No se encontró el paciente a modificar.");
 		}
@@ -77,6 +79,7 @@ public class TurnoService implements ITurnoService {
 	public void eliminarTurno(Long id) throws ResourceNotFoundException {
 		if (turnoRepository.existsById(id)) {
 			turnoRepository.deleteById(id);
+			logger.info("Se ha eliminado el turno con el id " + id);
 		} else {
 			throw new ResourceNotFoundException("No se ha encontrado un turno correcto");
 		}

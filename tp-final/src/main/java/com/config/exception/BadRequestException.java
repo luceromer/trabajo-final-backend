@@ -1,4 +1,4 @@
-package com.controller.exception;
+package com.config.exception;
 
 public class BadRequestException extends Exception {
 	

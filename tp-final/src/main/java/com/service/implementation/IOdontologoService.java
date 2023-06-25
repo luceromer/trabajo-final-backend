@@ -1,6 +1,6 @@
 package com.service.implementation;
 
-import com.controller.exception.ResourceNotFoundException;
+import com.config.exception.ResourceNotFoundException;
 import com.model.OdontologoDTO;
 
 import java.util.Set;
