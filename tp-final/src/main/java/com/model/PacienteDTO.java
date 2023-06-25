@@ -1,21 +1,40 @@
 package com.model;
 
 import java.util.Date;
+import java.util.Set;
 
 public class PacienteDTO {
 	
 
-	private Integer id;
+	private Long id;
 	private String nombre;
 	private String apellido;
 	private String dni;
 	private Date fechaIngreso;
 	private DomicilioDTO domicilioDTO;
 	
+	private Set<OdontologoDTO> listaOdontologos;
+	
+	public DomicilioDTO getDomicilioDTO() {
+		return domicilioDTO;
+	}
+	
+	public void setDomicilioDTO(DomicilioDTO domicilioDTO) {
+		this.domicilioDTO = domicilioDTO;
+	}
+	
+	public Set<OdontologoDTO> getListaOdontologos() {
+		return listaOdontologos;
+	}
+	
+	public void setListaOdontologos(Set<OdontologoDTO> listaOdontologos) {
+		this.listaOdontologos = listaOdontologos;
+	}
+	
 	public PacienteDTO() {
 	}
 	
-	public PacienteDTO(Integer id, String nombre, String apellido, String dni, Date fechaIngreso, DomicilioDTO domicilioDTO) {
+	public PacienteDTO(Long id, String nombre, String apellido, String dni, Date fechaIngreso, DomicilioDTO domicilioDTO) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -42,11 +61,11 @@ public class PacienteDTO {
 		this.apellido = apellido;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

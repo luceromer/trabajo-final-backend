@@ -5,28 +5,28 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name="Turnos")
 public class Turno {
 	@Id
 	@SequenceGenerator(name = "turno_sequence", sequenceName = "turno_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "turno_sequence")
-	private Integer id;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "paciente_id")
+	private Long id;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "paciente_id", nullable = false)
 	private Paciente paciente;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "odontologo_id")
+	@JoinColumn(name = "odontologo_id", nullable = false)
 	private Odontologo odontologo;
 	private LocalDate date;
 	
 	public Turno() {
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

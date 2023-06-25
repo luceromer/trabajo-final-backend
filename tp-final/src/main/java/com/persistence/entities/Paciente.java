@@ -3,15 +3,16 @@ package com.persistence.entities;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name="Pacientes")
 public class Paciente {
 	
 	@Id
 	@SequenceGenerator(name = "paciente_sequence", sequenceName = "paciente_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paciente_sequence")
-	private Integer id;
+	private Long id;
 	private String nombre;
 	private String apellido;
 	private String dni;
@@ -20,10 +21,22 @@ public class Paciente {
 	@JoinColumn(name = "domicilio_id")
 	private Domicilio domicilio;
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "paciente", nullable = false)
+	private Set<Turno> listaTurnos;
+	
 	public Paciente() {
 	}
 	
-	public Paciente(Integer id, String nombre, String apellido, String dni, Date fechaIngreso, Domicilio domicilio) {
+	public Set<Turno> getListaTurnos() {
+		return listaTurnos;
+	}
+	
+	public void setListaTurnos(Set<Turno> listaTurnos) {
+		this.listaTurnos = listaTurnos;
+	}
+	
+	public Paciente(Long id, String nombre, String apellido, String dni, Date fechaIngreso, Domicilio domicilio) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -50,11 +63,11 @@ public class Paciente {
 		this.apellido = apellido;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

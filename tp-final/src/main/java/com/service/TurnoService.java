@@ -1,38 +1,84 @@
 package com.service;
+import com.controller.exception.ResourceNotFoundException;
+import com.model.OdontologoDTO;
 import com.model.TurnoDTO;
+import com.persistence.entities.Odontologo;
+import com.persistence.entities.Paciente;
 import com.persistence.entities.Turno;
+import com.persistence.repository.OdontologoRepository;
+import com.persistence.repository.PacienteRepository;
 import com.persistence.repository.TurnoRepository;
+import com.service.implementation.ITurnoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
-public class TurnoService {
+public class TurnoService implements ITurnoService {
+	@Autowired
 	private TurnoRepository turnoRepository;
+	@Autowired
+	private PacienteRepository pacienteRepository;
+	@Autowired
+	private OdontologoRepository odontologoRepository;
+	
+	@Autowired
+	private ModelMapper mapper;
 	public TurnoService() {
 		this.turnoRepository = turnoRepository;
 	}
 	
-	public Optional<Turno> registrarTurno(Turno turno){
-		Optional<Turno> respuesta = null;
-		if(turno.getDate().isAfter(LocalDate.now())){
-			respuesta = turnoRepository.guardar(turno);
+	@Override
+	public void crearTurno(TurnoDTO turnoDTO) throws ResourceNotFoundException {
+		Turno turno = mapper.map(turnoDTO, Turno.class);
+		if(pacienteRepository.existsById(turno.getPaciente().getId()) || odontologoRepository.existsById(turno.getOdontologo().getId())) {
+			turnoRepository.save(turno);
+		} else {
+			throw new ResourceNotFoundException("El paciente o el odontólogo no existen. Por favor cree primero los registros.");
 		}
-		
-		return respuesta;
-	}
-	public Optional<List<Turno>> listar(){
-		return turnoRepository.buscarTodos();
-	}
-	public void eliminar(Integer id){
-		turnoRepository.eliminar(id);
-	}
-	public Optional<Turno> actualizar(Turno turno){
-		return turnoRepository.actualizar(turno);
-	}
-	public Optional<Turno> buscar(Integer id){
-		return turnoRepository.buscarPorId(id);
 	}
 	
+	@Override
+	public Set<TurnoDTO> listarTurnos() {
+		List<Turno> listaTurnos = turnoRepository.findAll();
+		Set<TurnoDTO> listaTurnosDTO = null;
+		for(Turno tur:listaTurnos) {
+			listaTurnosDTO.add(mapper.map(tur, TurnoDTO.class));
+		}
+		return listaTurnosDTO;
+	}
+	
+	@Override
+	public TurnoDTO buscarTurnoPorID(Long id) throws ResourceNotFoundException {
+		if(turnoRepository.existsById(id)) {
+			Optional<Turno> turnoEncontrado = turnoRepository.findById(id);
+			TurnoDTO turnoDTO = mapper.map(turnoEncontrado, TurnoDTO.class);
+			return turnoDTO;
+		} else {
+			throw new ResourceNotFoundException("El id no es válido.");
+		}
+	}
+	
+	@Override
+	public void modificarTurno(TurnoDTO turnoDTO) throws ResourceNotFoundException {
+		if (turnoRepository.existsById(turnoDTO.getId())) {
+			Turno turno = mapper.map(turnoDTO, Turno.class);
+			turnoRepository.save(turno);}
+		else {
+			throw new ResourceNotFoundException("No se encontró el paciente a modificar.");
+		}
+	}
+	
+	@Override
+	public void eliminarTurno(Long id) throws ResourceNotFoundException {
+		if (turnoRepository.existsById(id)) {
+			turnoRepository.deleteById(id);
+		} else {
+			throw new ResourceNotFoundException("No se ha encontrado un turno correcto");
+		}
+	}
 }

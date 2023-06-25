@@ -1,25 +1,30 @@
 package com.model;
 
+import java.util.Set;
+
 public class OdontologoDTO {
 	
-		private Integer id;
+		private Long id;
 		private Integer numeroMatricula;
 		private String nombre;
 		private String apellido;
 		
+		private Set<PacienteDTO> listaDePacientes;
 		
-		public OdontologoDTO(Integer id, Integer numeroMatricula, String nombre, String apellido) {
+	
+		
+		public OdontologoDTO(Long id, Integer numeroMatricula, String nombre, String apellido) {
 			this.id = id;
 			this.numeroMatricula = numeroMatricula;
 			this.nombre = nombre;
 			this.apellido = apellido;
 		}
 		
-		public Integer getId() {
+		public Long getId() {
 			return id;
 		}
 		
-		public void setId(Integer id) {
+		public void setId(Long id) {
 			this.id = id;
 		}
 		
@@ -55,5 +60,13 @@ public class OdontologoDTO {
 				", nombre='" + nombre + '\'' +
 				", apellido='" + apellido + '\'' +
 				'}';
+	}
+	
+	public Set<PacienteDTO> getListaDePacientes() {
+		return listaDePacientes;
+	}
+	
+	public void setListaDePacientes(Set<PacienteDTO> listaDePacientes) {
+		this.listaDePacientes = listaDePacientes;
 	}
 }

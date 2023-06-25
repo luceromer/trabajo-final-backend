@@ -12,16 +12,5 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PacienteRepository extends JpaRepository<PacienteDTO, Long> {
-	@Query("SELECT p FROM Paciente p where p.id = ?1")
-	Optional<Paciente> buscarPorId(Integer id);
-	
-	Optional<List<Paciente>> buscarTodos();
-	
-	Optional<Paciente> guardar(Paciente paciente);
-	
-	Optional<Paciente> actualizar(Paciente paciente);
-	
-	Optional<Paciente> eliminar(Integer id);
-	
+public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 }

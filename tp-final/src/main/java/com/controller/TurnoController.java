@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.controller.exception.ResourceNotFoundException;
 import com.model.TurnoDTO;
 import com.persistence.entities.Turno;
 import com.service.OdontologoService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/turnos")
@@ -25,48 +27,44 @@ public class TurnoController {
 	
 	
 	@GetMapping
-	public ResponseEntity<Optional<List<Turno>>> buscarTodos() {
-		return ResponseEntity.ok(turnoService.listar());
+	public ResponseEntity<Set<TurnoDTO>> buscarTodos() {
+		return ResponseEntity.ok(turnoService.listarTurnos());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Turno>> buscar(@PathVariable Integer id) {
-		Optional<Turno> turno = Optional.ofNullable(turnoService.buscar(id).orElse(null));
-		return ResponseEntity.ok(turno);
+	public ResponseEntity<TurnoDTO> buscar(@PathVariable Long id) throws ResourceNotFoundException {
+		TurnoDTO turnoEncontradoDTO = turnoService.buscarTurnoPorID(id);
+		return ResponseEntity.ok(turnoEncontradoDTO);
 	}
 	
 	@PostMapping
-		public ResponseEntity<Optional<Turno>> registrarTurno(@RequestBody Turno turno) {
-		ResponseEntity<Optional<Turno>> respuesta;
-		if(pacienteService.buscar(turno.getPaciente().getId()) != null
-				&& odontologoService.buscar(turno.getOdontologo().getId()) != null){
-			respuesta = ResponseEntity.ok(turnoService.registrarTurno(turno));
-		}else{
-			respuesta = ResponseEntity.badRequest().build();
-		}
-		return respuesta;
+		public ResponseEntity<String> registrarTurno(@RequestBody TurnoDTO turnoDTO) throws ResourceNotFoundException {
+		 turnoService.crearTurno(turnoDTO);
+			return ResponseEntity.ok("Todo ok");
 	}
 	
 	@PutMapping()
-	public ResponseEntity<Optional<Turno>> actualizar(@RequestBody Turno turno) {
-		ResponseEntity<Optional<Turno>> response = null;
-		if (turno.getId() != null && turnoService.buscar(turno.getId()).isPresent())
-			response = ResponseEntity.ok(turnoService.actualizar(turno));
-		else
-			response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		return response;
+	public ResponseEntity<Optional<Turno>> actualizar(@RequestBody TurnoDTO turnoDTO) {
+	return null;
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> eliminar(@PathVariable Integer id) {
-		ResponseEntity<String> response = null;
-		if (turnoService.buscar(id).isPresent()) {
-			turnoService.eliminar(id);
-			response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Eliminado");
-		} else {
-			response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		return response;
+	return null;
 	}
+	
+	@ExceptionHandler({Exception.class})
+	public ResponseEntity<String> generalExceptionHandler(Exception ex) {
+		System.out.println("Ha ocurrido un error: " + ex.getMessage());
+		return ResponseEntity.internalServerError().body("Ha ocurrido un error. Por favor intentar más tarde");
+	}
+	
+	@ExceptionHandler({ResourceNotFoundException.class})
+	public ResponseEntity<String> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+		System.out.println("Ha ocurrido un error: " + ex.getMessage());
+		return ResponseEntity.badRequest().body("Hubo un error: Odontólogo y/o Paciente inexistentes.");
+	}
+	
+	
 	
 }

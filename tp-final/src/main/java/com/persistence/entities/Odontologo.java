@@ -1,31 +1,45 @@
 package com.persistence.entities;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
-@Table
+@Table(name="Odontologos")
 public class Odontologo {
 	
 	@Id
 	@SequenceGenerator(name = "odontologo_sequence", sequenceName = "odontologo_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "odontologo_sequence")
-		private Integer id;
+		private Long id;
 		private Integer numeroMatricula;
 		private String nombre;
 		private String apellido;
 		
-		
-		public Odontologo(Integer id, Integer numeroMatricula, String nombre, String apellido) {
+		@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+		@JoinColumn(name = "odontologo", nullable = false)
+		private Set<Turno> listaDeTurnos;
+	
+	public Set<Turno> getListaDeTurnos() {
+		return listaDeTurnos;
+	}
+	
+	public void setListaDeTurnos(Set<Turno> listaDeTurnos) {
+		this.listaDeTurnos = listaDeTurnos;
+	}
+	
+	// private List<Turno> turnos
+		public Odontologo(Long id, Integer numeroMatricula, String nombre, String apellido) {
 			this.id = id;
 			this.numeroMatricula = numeroMatricula;
 			this.nombre = nombre;
 			this.apellido = apellido;
 		}
 		
-		public Integer getId() {
+		public Long getId() {
 			return id;
 		}
 		
-		public void setId(Integer id) {
+		public void setId(Long id) {
 			this.id = id;
 		}
 		

@@ -11,17 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DomicilioRepository extends JpaRepository<DomicilioDTO, Long> {
-	
-	@Query("SELECT d FROM Domicilio d where d.id = ?1")
-	Optional<Domicilio> buscarDomicilio(Integer id);
-	
-	Optional<List<Domicilio>> buscarTodos();
-	
-	Optional<Domicilio> guardar(Domicilio domicilio);
-	
-	Optional<Domicilio> actualizar(Domicilio domicilio);
-	
-	Optional<Domicilio> eliminar(Integer id);
-	
+public interface DomicilioRepository extends JpaRepository<Domicilio, Long> {
+
 }
