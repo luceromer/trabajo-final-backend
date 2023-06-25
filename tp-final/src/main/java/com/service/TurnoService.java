@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class TurnoService implements ITurnoService {
 	@Override
 	public Set<TurnoDTO> listarTurnos() {
 		List<Turno> listaTurnos = turnoRepository.findAll();
-		Set<TurnoDTO> listaTurnosDTO = null;
+		Set<TurnoDTO> listaTurnosDTO = new HashSet<>();
 		for(Turno tur:listaTurnos) {
 			listaTurnosDTO.add(mapper.map(tur, TurnoDTO.class));
 		}
@@ -56,7 +57,7 @@ public class TurnoService implements ITurnoService {
 	@Override
 	public TurnoDTO buscarTurnoPorID(Long id) throws ResourceNotFoundException {
 		if(turnoRepository.existsById(id)) {
-			Optional<Turno> turnoEncontrado = turnoRepository.findById(id);
+			Turno turnoEncontrado = turnoRepository.findById(id).get();
 			TurnoDTO turnoDTO = mapper.map(turnoEncontrado, TurnoDTO.class);
 			return turnoDTO;
 		} else {

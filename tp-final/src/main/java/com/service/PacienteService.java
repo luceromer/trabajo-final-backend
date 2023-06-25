@@ -55,10 +55,9 @@ public class PacienteService implements IPacienteService {
 	@Override
 	public PacienteDTO buscarPacientePorID(Long id) throws ResourceNotFoundException {
 		if (pacienteRepository.existsById(id)) {
-			Optional<Paciente> pacienteEncontrado = pacienteRepository.findById(id);
+			Paciente pacienteEncontrado = pacienteRepository.findById(id).get();
 			logger.info("Se ha encontrado un paciente con el id " + id);
 			PacienteDTO pacienteDTO =  mapper.map(pacienteEncontrado, PacienteDTO.class);
-			logger.info(pacienteDTO.toString());
 			return pacienteDTO;
 		} else {
 			throw new ResourceNotFoundException("No se ha encontrado un paciente correcto.");

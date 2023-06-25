@@ -2,13 +2,11 @@ package com.model;
 
 
 public class DomicilioDTO {
-	
 	private Integer id;
 		private String calle;
 		private String numero;
 		private String localidad;
 		private String provincia;
-		
 		public DomicilioDTO() {
 		}
 		
@@ -68,7 +66,7 @@ public class DomicilioDTO {
 		
 		@Override
 		public String toString() {
-			return "Domicilio{" +
+			return "DomicilioDTO{" +
 					"id=" + id +
 					", calle='" + calle + '\'' +
 					", numero='" + numero + '\'' +

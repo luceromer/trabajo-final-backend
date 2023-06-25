@@ -10,10 +10,12 @@ public class OdontologoDTO {
 		private String apellido;
 		
 		private Set<PacienteDTO> listaDePacientes;
-		
 	
-		
-		public OdontologoDTO(Long id, Integer numeroMatricula, String nombre, String apellido) {
+	
+	public OdontologoDTO() {
+	}
+	
+	public OdontologoDTO(Long id, Integer numeroMatricula, String nombre, String apellido) {
 			this.id = id;
 			this.numeroMatricula = numeroMatricula;
 			this.nombre = nombre;
@@ -54,7 +56,7 @@ public class OdontologoDTO {
 	
 	@Override
 	public String toString() {
-		return "Odontologo{" +
+		return "OdontologoDTO{" +
 				"id=" + id +
 				", numeroMatricula=" + numeroMatricula +
 				", nombre='" + nombre + '\'' +

@@ -45,7 +45,7 @@ public class TurnoDTO {
 	
 	@Override
 	public String toString() {
-		return "Turno{" +
+		return "TurnoDTO{" +
 				"id=" + id +
 				", paciente=" + pacienteDTO +
 				", odontologo=" + odontologoDTO +

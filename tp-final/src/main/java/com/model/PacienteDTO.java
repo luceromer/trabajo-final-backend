@@ -103,7 +103,7 @@ public class PacienteDTO {
 	
 	@Override
 	public String toString() {
-		return "Paciente{" +
+		return "PacienteDTO{" +
 				"id=" + id +
 				", nombre='" + nombre + '\'' +
 				", apellido='" + apellido + '\'' +

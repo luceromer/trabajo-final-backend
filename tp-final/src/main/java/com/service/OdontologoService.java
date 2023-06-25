@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,7 +37,7 @@ import java.util.logging.Logger;
 	@Override
 	public Set<OdontologoDTO> listarOdontologos() {
 		List<Odontologo> listaOdontologos = odontologoRepository.findAll();
-		Set<OdontologoDTO> listaOdontologosDTO = null;
+		Set<OdontologoDTO> listaOdontologosDTO = new HashSet<>();
 		for(Odontologo odo:listaOdontologos) {
 			listaOdontologosDTO.add(mapper.map(odo, OdontologoDTO.class));
 		}
@@ -46,7 +47,7 @@ import java.util.logging.Logger;
 	@Override
 	public OdontologoDTO buscarOdontologoPorID(Long id) throws ResourceNotFoundException {
 		if (odontologoRepository.existsById(id)) {
-			Optional<Odontologo> odontologoEncontrado = odontologoRepository.findById(id);
+			Odontologo odontologoEncontrado = odontologoRepository.findById(id).get();
 			logger.info("Se ha encontrado el odontologo de id " + id);
 			OdontologoDTO odontologoDTO =  mapper.map(odontologoEncontrado, OdontologoDTO.class);
 			return odontologoDTO;
