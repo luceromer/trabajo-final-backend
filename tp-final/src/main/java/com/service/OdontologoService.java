@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 	@Override
 	public Set<OdontologoDTO> listarOdontologos() {
 		List<Odontologo> listaOdontologos = odontologoRepository.findAll();
+		logger.info("Se ha encontrado una lista de odontólogos.");
 		Set<OdontologoDTO> listaOdontologosDTO = new HashSet<>();
 		for(Odontologo odo:listaOdontologos) {
 			listaOdontologosDTO.add(mapper.map(odo, OdontologoDTO.class));
@@ -80,23 +81,6 @@ import java.util.logging.Logger;
 			throw new ResourceNotFoundException("No se ha encontrado un odontólogo correcto");
 		}
 	}
-	
-	public Set<PacienteDTO> listarPacientesDeOdontologos(Long id) throws ResourceNotFoundException {
-		if (odontologoRepository.existsById(id)) {
-			Odontologo odontologo = odontologoRepository.findById(id).get();
-			Set<Turno> listaTurnos = odontologo.getListaDeTurnos();
-			Set<PacienteDTO> listaPacientes = new HashSet<>();
-			for(Turno turno:listaTurnos) {
-				listaPacientes.add(mapper.map(turno.getPaciente(), PacienteDTO.class)  );
-			}
-			logger.info("Se ha encontrado un paciente con el id " + id + " y se ha devuelto la lista de pacientes.");
-			return listaPacientes;
-		} else {
-			throw new ResourceNotFoundException("No se ha encontrado un odontólogo correcto");
-		}
-	}
-	
-	
 	}
 	
 

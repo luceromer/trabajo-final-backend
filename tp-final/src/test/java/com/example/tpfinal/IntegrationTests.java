@@ -47,22 +47,6 @@ public class IntegrationTests {
 	}
 	
 	@Test
-	public void registrarPaciente() throws Exception {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		
-		Paciente pac = new Paciente("Juan Crisóstomo", "Lafinur", "887663",dateFormatter.parse("2023-01-10") , new Domicilio("Sucre", "1212", "CABA", "CABA"));
-		MvcResult response = this.mockMvc.perform(MockMvcRequestBuilders.post("/pacientes")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(pac)))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-		
-		Assert.assertFalse(response.getResponse().getContentAsString().isEmpty());
-	}
-	
-	@Test
 	public void registrarTurno() throws Exception {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -88,5 +72,32 @@ public class IntegrationTests {
 		
 		Assert.assertFalse(response.getResponse().getContentAsString().isEmpty());
 	}
-
+	@Test
+	public void buscarTurnoPorPaciente() throws Exception {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		
+		Odontologo od = new Odontologo(1L, 87088,"Juan Carlos", "Batman");
+		Paciente pac = new Paciente(1L, "Juan Crisóstomo", "Lafinur", "887663", dateFormatter.parse("2023-01-10") , new Domicilio("Sucre", "1212", "CABA", "CABA"));
+		Turno t = new Turno(pac, od, dateFormatter.parse("2023-10-10"));
+		
+		MvcResult response = this.mockMvc.perform(MockMvcRequestBuilders.post("/pacientes")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(pac)))
+				.andDo(result -> mockMvc.perform(MockMvcRequestBuilders.post("/odontologos")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(od))))
+				.andDo(result -> mockMvc.perform(MockMvcRequestBuilders.post("/turnos")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(objectMapper.writeValueAsString(t))))
+				.andDo(result -> mockMvc.perform(MockMvcRequestBuilders.get("/turnos?paciente=1")
+										.contentType(MediaType.APPLICATION_JSON)
+										.content(objectMapper.writeValueAsString(t)))
+						.andDo(MockMvcResultHandlers.print()))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+		
+		Assert.assertFalse(response.getResponse().getContentAsString().isEmpty());
+	}
+	
 }

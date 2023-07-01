@@ -1,12 +1,9 @@
 package com.service;
-import com.config.exception.GlobalExceptionHandler;
+
 import com.config.exception.ResourceNotFoundException;
-import com.model.OdontologoDTO;
 import com.model.PacienteDTO;
 import com.persistence.entities.Domicilio;
-import com.persistence.entities.Odontologo;
 import com.persistence.entities.Paciente;
-import com.persistence.entities.Turno;
 import com.persistence.repository.DomicilioRepository;
 import com.persistence.repository.PacienteRepository;
 import com.service.implementation.IPacienteService;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -86,22 +82,6 @@ public class PacienteService implements IPacienteService {
 			} else {
 				throw new ResourceNotFoundException("No se ha encontrado un paciente correcto");
 			}
-	}
-	
-	public Set<OdontologoDTO> listarOdontologosDePaciente(Long id) throws ResourceNotFoundException {
-		if (pacienteRepository.existsById(id)) {
-			Paciente paciente = pacienteRepository.findById(id).get();
-			Set<Turno> listaTurnos = paciente.getListaTurnos();
-			Set<OdontologoDTO> listaOdontologos = new HashSet<>();
-			for(Turno turno:listaTurnos) {
-				listaOdontologos.add(mapper.map(turno.getOdontologo(), OdontologoDTO.class)  );
-			}
-			logger.info("Se ha encontrado un paciente con el id " + id + " y se ha devuelto una lista de odontólogos.");
-			logger.info(paciente.getListaTurnos().toString());
-			return listaOdontologos;
-		} else {
-			throw new ResourceNotFoundException("No se ha encontrado un paciente correcto");
-		}
 	}
 	
 }

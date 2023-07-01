@@ -1,8 +1,7 @@
 package com.service;
+
 import com.config.exception.ResourceNotFoundException;
 import com.model.TurnoDTO;
-import com.persistence.entities.Odontologo;
-import com.persistence.entities.Paciente;
 import com.persistence.entities.Turno;
 import com.persistence.repository.OdontologoRepository;
 import com.persistence.repository.PacienteRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -62,6 +60,7 @@ public class TurnoService implements ITurnoService {
 	public TurnoDTO buscarTurnoPorID(Long id) throws ResourceNotFoundException {
 		if(turnoRepository.existsById(id)) {
 			Turno turnoEncontrado = turnoRepository.findById(id).get();
+			logger.info("Se ha encontrado un turno con el id " +id);
 			TurnoDTO turnoDTO = mapper.map(turnoEncontrado, TurnoDTO.class);
 			return turnoDTO;
 		} else {
@@ -83,10 +82,7 @@ public class TurnoService implements ITurnoService {
 	@Override
 	public void eliminarTurno(Long id) throws ResourceNotFoundException {
 		if (turnoRepository.existsById(id)) {
-			Turno turno = turnoRepository.findById(id).get();
 			turnoRepository.deleteById(id);
-			turno.getPaciente().deleteTurnoFromListaDeTurnos(turno);
-			turno.getOdontologo().deleteTurnoFromListaDeTurnos(turno);
 			logger.info("Se ha eliminado el turno con el id " + id);
 		} else {
 			throw new ResourceNotFoundException("No se ha encontrado un turno correcto");
