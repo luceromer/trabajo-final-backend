@@ -1,6 +1,8 @@
 package com.persistence.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,18 +17,21 @@ public class Odontologo {
 		private String nombre;
 		private String apellido;
 		
-		@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-		@JoinColumn(name = "odontologo", nullable = false)
+	@OneToMany(mappedBy = "odontologo")
+	@JsonIgnore
 		private Set<Turno> listaDeTurnos;
 	
 	public Set<Turno> getListaDeTurnos() {
 		return listaDeTurnos;
 	}
 	
-	public void setListaDeTurnos(Set<Turno> listaDeTurnos) {
-		this.listaDeTurnos = listaDeTurnos;
+	public void addTurnoToListaDeTurnos(Turno turno) {
+		listaDeTurnos.add(turno);
 	}
 	
+	public void deleteTurnoFromListaDeTurnos(Turno turno) {
+		listaDeTurnos.remove(turno);
+	}
 	// private List<Turno> turnos
 		public Odontologo(Long id, Integer numeroMatricula, String nombre, String apellido) {
 			this.id = id;
@@ -36,6 +41,13 @@ public class Odontologo {
 		}
 	
 	public Odontologo() {
+	}
+	
+	public Odontologo(Integer numeroMatricula, String nombre, String apellido) {
+		this.numeroMatricula = numeroMatricula;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.listaDeTurnos = new HashSet<>();
 	}
 	
 	public Long getId() {

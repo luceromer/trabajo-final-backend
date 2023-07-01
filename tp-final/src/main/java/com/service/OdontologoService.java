@@ -2,7 +2,10 @@ package com.service;
 
 import com.config.exception.ResourceNotFoundException;
 import com.model.OdontologoDTO;
+import com.model.PacienteDTO;
 import com.persistence.entities.Odontologo;
+import com.persistence.entities.Paciente;
+import com.persistence.entities.Turno;
 import com.persistence.repository.OdontologoRepository;
 import com.service.implementation.IOdontologoService;
 
@@ -77,6 +80,22 @@ import java.util.logging.Logger;
 			throw new ResourceNotFoundException("No se ha encontrado un odontólogo correcto");
 		}
 	}
+	
+	public Set<PacienteDTO> listarPacientesDeOdontologos(Long id) throws ResourceNotFoundException {
+		if (odontologoRepository.existsById(id)) {
+			Odontologo odontologo = odontologoRepository.findById(id).get();
+			Set<Turno> listaTurnos = odontologo.getListaDeTurnos();
+			Set<PacienteDTO> listaPacientes = new HashSet<>();
+			for(Turno turno:listaTurnos) {
+				listaPacientes.add(mapper.map(turno.getPaciente(), PacienteDTO.class)  );
+			}
+			logger.info("Se ha encontrado un paciente con el id " + id + " y se ha devuelto la lista de pacientes.");
+			return listaPacientes;
+		} else {
+			throw new ResourceNotFoundException("No se ha encontrado un odontólogo correcto");
+		}
+	}
+	
 	
 	}
 	

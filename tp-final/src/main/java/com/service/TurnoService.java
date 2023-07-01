@@ -1,6 +1,8 @@
 package com.service;
 import com.config.exception.ResourceNotFoundException;
 import com.model.TurnoDTO;
+import com.persistence.entities.Odontologo;
+import com.persistence.entities.Paciente;
 import com.persistence.entities.Turno;
 import com.persistence.repository.OdontologoRepository;
 import com.persistence.repository.PacienteRepository;
@@ -38,6 +40,8 @@ public class TurnoService implements ITurnoService {
 		Turno turno = mapper.map(turnoDTO, Turno.class);
 		if(pacienteRepository.existsById(turno.getPaciente().getId()) || odontologoRepository.existsById(turno.getOdontologo().getId())) {
 			turnoRepository.save(turno);
+			turno.getPaciente().addTurnoToListaDeTurnos(turno);
+			turno.getOdontologo().addTurnoToListaDeTurnos(turno);
 			logger.info("Se ha creado el turno con el id " + turno.getId());
 		} else {
 			throw new ResourceNotFoundException("El paciente o el odontólogo no existen. Por favor cree primero los registros.");
@@ -79,10 +83,29 @@ public class TurnoService implements ITurnoService {
 	@Override
 	public void eliminarTurno(Long id) throws ResourceNotFoundException {
 		if (turnoRepository.existsById(id)) {
+			Turno turno = turnoRepository.findById(id).get();
 			turnoRepository.deleteById(id);
+			turno.getPaciente().deleteTurnoFromListaDeTurnos(turno);
+			turno.getOdontologo().deleteTurnoFromListaDeTurnos(turno);
 			logger.info("Se ha eliminado el turno con el id " + id);
 		} else {
 			throw new ResourceNotFoundException("No se ha encontrado un turno correcto");
 		}
+	}
+
+	@Override
+	public Set<TurnoDTO> buscarTurnosPorPaciente(Long id) throws ResourceNotFoundException {
+		if(pacienteRepository.existsById(id)) {
+			Set<Turno> turnosDePaciente = turnoRepository.buscarTurnoPorPaciente(id);
+			Set<TurnoDTO> turnosDTODePaciente = new HashSet<>();
+			for(Turno t:turnosDePaciente) {
+				turnosDTODePaciente.add( mapper.map(t, TurnoDTO.class));
+			}
+			return turnosDTODePaciente;
+		} else {
+			throw new ResourceNotFoundException("No se ha encontrado un paciente correcto");
+		}
+		
+		
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,17 +24,23 @@ public class TurnoController {
 	@Autowired
 	private OdontologoService odontologoService;
 	
-	
-	@GetMapping
-	public ResponseEntity<Set<TurnoDTO>> buscarTodos() {
-		return ResponseEntity.ok(turnoService.listarTurnos());
-	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<TurnoDTO> buscar(@PathVariable Long id) throws ResourceNotFoundException {
 		TurnoDTO turnoEncontradoDTO = turnoService.buscarTurnoPorID(id);
 		return ResponseEntity.ok(turnoEncontradoDTO);
 	}
+	
+	@GetMapping()
+	public ResponseEntity<Set<TurnoDTO>> buscarTodosLosTurnosOPorPaciente(@RequestParam(name="paciente_id", required= false) Long id) throws ResourceNotFoundException {
+			if(id == null) {
+				return ResponseEntity.ok(turnoService.listarTurnos());
+			} else {
+				Set<TurnoDTO> turnosEncontradosDTO = turnoService.buscarTurnosPorPaciente(id);
+				return ResponseEntity.ok(turnosEncontradosDTO);
+			}
+		}
+	
 	
 	@PostMapping
 		public ResponseEntity<String> registrarTurno(@RequestBody TurnoDTO turnoDTO) throws ResourceNotFoundException {
@@ -50,6 +57,8 @@ public class TurnoController {
 	public ResponseEntity<String> eliminar(@PathVariable Integer id) {
 	return null;
 	}
+	
+	
 	
 	/* @ExceptionHandler({Exception.class})
 	public ResponseEntity<String> generalExceptionHandler(Exception ex) {

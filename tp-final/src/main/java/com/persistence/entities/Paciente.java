@@ -1,5 +1,6 @@
 package com.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -21,8 +22,8 @@ public class Paciente {
 	@JoinColumn(name = "domicilio_id")
 	private Domicilio domicilio;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "paciente", nullable = false)
+	@OneToMany(mappedBy = "paciente")
+	@JsonIgnore
 	private Set<Turno> listaTurnos;
 	
 	public Paciente() {
@@ -32,8 +33,12 @@ public class Paciente {
 		return listaTurnos;
 	}
 	
-	public void setListaTurnos(Set<Turno> listaTurnos) {
-		this.listaTurnos = listaTurnos;
+	public void addTurnoToListaDeTurnos(Turno turno) {
+		listaTurnos.add(turno);
+	}
+	
+	public void deleteTurnoFromListaDeTurnos(Turno turno) {
+		listaTurnos.remove(turno);
 	}
 	
 	public Paciente(Long id, String nombre, String apellido, String dni, Date fechaIngreso, Domicilio domicilio) {
@@ -46,7 +51,6 @@ public class Paciente {
 	}
 	
 	public Paciente(String nombre, String apellido, String dni, Date fechaIngreso, Domicilio domicilio) {
-		
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;

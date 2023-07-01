@@ -3,6 +3,7 @@ package com.controller;
 import com.config.exception.BadRequestException;
 import com.config.exception.ResourceNotFoundException;
 import com.model.OdontologoDTO;
+import com.model.PacienteDTO;
 import com.service.OdontologoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,11 @@ public class OdontologoController {
 	public ResponseEntity<OdontologoDTO> buscar(@PathVariable Long id) throws BadRequestException, ResourceNotFoundException {
 		OdontologoDTO odontologoDTO = odontologoService.buscarOdontologoPorID(id);
 		return ResponseEntity.ok(odontologoDTO);
+	}
+	
+	@GetMapping("/{id}/pacientes")
+	public ResponseEntity<Set<PacienteDTO>> listarPacientes(@PathVariable Long id) throws ResourceNotFoundException {
+		return ResponseEntity.ok(odontologoService.listarPacientesDeOdontologos(id));
 	}
 	
 	@PostMapping()

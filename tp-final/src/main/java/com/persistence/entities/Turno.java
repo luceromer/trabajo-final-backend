@@ -3,6 +3,7 @@ package com.persistence.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name="Turnos")
@@ -17,9 +18,15 @@ public class Turno {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "odontologo_id", nullable = false)
 	private Odontologo odontologo;
-	private LocalDate date;
+	private Date date;
 	
 	public Turno() {
+	}
+	
+	public Turno(Paciente paciente, Odontologo odontologo, Date date) {
+		this.paciente = paciente;
+		this.odontologo = odontologo;
+		this.date = date;
 	}
 	
 	public Long getId() {
@@ -46,11 +53,11 @@ public class Turno {
 		this.odontologo = odontologo;
 	}
 	
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 	
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 	

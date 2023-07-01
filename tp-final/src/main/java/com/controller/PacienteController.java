@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.config.exception.ResourceNotFoundException;
+import com.model.OdontologoDTO;
 import com.model.PacienteDTO;
 import com.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,10 @@ public class PacienteController {
 		return ResponseEntity.ok(pacienteDTO);
 	}
 	
+	@GetMapping("/{id}/odontologos")
+	public ResponseEntity<Set<OdontologoDTO>> listarPacientes(@PathVariable Long id) throws ResourceNotFoundException {
+		return ResponseEntity.ok(pacienteService.listarOdontologosDePaciente(id));
+	}
 	@PostMapping()
 	public ResponseEntity<String> registrarPaciente(@RequestBody PacienteDTO pacienteDTO) {
 		pacienteService.crearPaciente(pacienteDTO);
