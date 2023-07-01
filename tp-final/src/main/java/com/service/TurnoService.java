@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +32,7 @@ public class TurnoService implements ITurnoService {
 	private ModelMapper mapper;
 	
 	private static final Logger logger = Logger.getLogger(TurnoService.class.getName());
+	SimpleDateFormat dateFormatter = new SimpleDateFormat("YYYY-mm-dd");
 	public TurnoService() {
 		this.turnoRepository = turnoRepository;
 	}
@@ -92,7 +96,7 @@ public class TurnoService implements ITurnoService {
 	@Override
 	public Set<TurnoDTO> buscarTurnosPorPaciente(Long id) throws ResourceNotFoundException {
 		if(pacienteRepository.existsById(id)) {
-			Set<Turno> turnosDePaciente = turnoRepository.buscarTurnoPorPaciente(id);
+			Set<Turno> turnosDePaciente = turnoRepository.buscarTurnosPorPaciente(id);
 			Set<TurnoDTO> turnosDTODePaciente = new HashSet<>();
 			for(Turno t:turnosDePaciente) {
 				turnosDTODePaciente.add( mapper.map(t, TurnoDTO.class));
@@ -101,7 +105,29 @@ public class TurnoService implements ITurnoService {
 		} else {
 			throw new ResourceNotFoundException("No se ha encontrado un paciente correcto");
 		}
-		
-		
+	}
+	
+	@Override
+	public Set<TurnoDTO> buscarTurnosPorFecha(String date) throws ParseException {
+		Date newDate = dateFormatter.parse(date);
+		Set<Turno> turnosDePaciente = turnoRepository.buscarTurnosPorFecha(newDate);
+		Set<TurnoDTO> turnosDTODePaciente = new HashSet<>();
+			for(Turno t:turnosDePaciente) {
+				turnosDTODePaciente.add( mapper.map(t, TurnoDTO.class));
+			}
+			return turnosDTODePaciente;
+	}
+	
+	@Override
+	public Set<TurnoDTO> buscarTurnosPorPacienteYFecha(Long id, String date) throws ParseException {
+		Date newDate = dateFormatter.parse(date);
+		Set<Turno> turnosPorFecha = turnoRepository.buscarTurnosPorFecha(newDate);
+		Set<TurnoDTO> turnosDTOPorFechaYPaciente = new HashSet<>();
+		for(Turno t:turnosPorFecha) {
+			if (t.getPaciente().getId().equals(id)) {
+			turnosDTOPorFechaYPaciente.add(mapper.map(t, TurnoDTO.class));
+		}
+		}
+		return turnosDTOPorFechaYPaciente;
 	}
 }

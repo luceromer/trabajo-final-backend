@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/odontologos")
 public class OdontologoController {
-	private static final Logger logger = Logger.getLogger(OdontologoService.class.getName());
+	private static final Logger logger = Logger.getLogger(OdontologoController.class.getName());
 	
 	@Autowired
 	private OdontologoService odontologoService;
