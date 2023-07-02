@@ -14,11 +14,11 @@ import java.util.Set;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
-	
-	@Query(value = "SELECT * FROM Turnos WHERE paciente_id = ?1", nativeQuery = true)
-	Set<Turno> buscarTurnosPorPaciente(Long id);
-	
-	@Query(value = "SELECT * FROM Turnos WHERE date = ?1", nativeQuery = true)
-	Set<Turno> buscarTurnosPorFecha(Date date);
-	
+
+    @Query(value = "SELECT * FROM Turnos WHERE paciente_id = ?1", nativeQuery = true)
+    Set<Turno> buscarTurnosPorPaciente(Long id);
+
+    @Query(value = "SELECT * FROM Turnos WHERE date = ?1", nativeQuery = true)
+    Set<Turno> buscarTurnosPorFecha(Date date);
+
 }

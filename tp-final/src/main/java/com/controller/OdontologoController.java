@@ -16,44 +16,44 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/odontologos")
 public class OdontologoController {
-	private static final Logger logger = Logger.getLogger(OdontologoController.class.getName());
-	
-	@Autowired
-	private OdontologoService odontologoService;
-	
-	@GetMapping
-	public ResponseEntity<Set<OdontologoDTO>> buscarTodos(){
-		logger.info("Petición GET - Buscar todos los odontólogos");
-		return ResponseEntity.ok(odontologoService.listarOdontologos());
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<OdontologoDTO> buscar(@PathVariable Long id) throws BadRequestException, ResourceNotFoundException {
-		logger.info("Petición GET - Buscar odontólogo con id " + id);
-		OdontologoDTO odontologoDTO = odontologoService.buscarOdontologoPorID(id);
-		return ResponseEntity.ok(odontologoDTO);
-	}
-	
-	@PostMapping()
-	public ResponseEntity<String> registrarOdontologo(@RequestBody OdontologoDTO odontologoDTO) {
-		logger.info("Petición POST - Crear nuevo odontólogo");
-		odontologoService.crearOdontologo(odontologoDTO);
-		return ResponseEntity.ok("Odontólogo creado");
-	}
-	
-	
-	@PutMapping()
-	public ResponseEntity<String> actualizar(@RequestBody OdontologoDTO odontologoDTO) throws ResourceNotFoundException {
-		logger.info("Petición PUT - Modificar odontólogo " + odontologoDTO.getId());
-		odontologoService.modificarOdontologo(odontologoDTO);
-			return ResponseEntity.ok("Odontólogo modificado con éxito.");
-		}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> eliminar(@PathVariable Long id) throws ResourceNotFoundException {
-		logger.info("Petición DELETE - Borrar odontólogo " + id);
-			odontologoService.eliminarOdontologo(id);
-		return ResponseEntity.ok("Odontólogo con id " + id + "eliminado exitosamente.");
-	}
-	
+    private static final Logger logger = Logger.getLogger(OdontologoController.class.getName());
+
+    @Autowired
+    private OdontologoService odontologoService;
+
+    @GetMapping
+    public ResponseEntity<Set<OdontologoDTO>> buscarTodos() {
+        logger.info("Petición GET - Buscar todos los odontólogos");
+        return ResponseEntity.ok(odontologoService.listarOdontologos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OdontologoDTO> buscar(@PathVariable Long id) throws BadRequestException, ResourceNotFoundException {
+        logger.info("Petición GET - Buscar odontólogo con id " + id);
+        OdontologoDTO odontologoDTO = odontologoService.buscarOdontologoPorID(id);
+        return ResponseEntity.ok(odontologoDTO);
+    }
+
+    @PostMapping()
+    public ResponseEntity<String> registrarOdontologo(@RequestBody OdontologoDTO odontologoDTO) {
+        logger.info("Petición POST - Crear nuevo odontólogo");
+        odontologoService.crearOdontologo(odontologoDTO);
+        return ResponseEntity.ok("Odontólogo creado");
+    }
+
+
+    @PutMapping()
+    public ResponseEntity<String> actualizar(@RequestBody OdontologoDTO odontologoDTO) throws ResourceNotFoundException {
+        logger.info("Petición PUT - Modificar odontólogo " + odontologoDTO.getId());
+        odontologoService.modificarOdontologo(odontologoDTO);
+        return ResponseEntity.ok("Odontólogo modificado con éxito.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable Long id) throws ResourceNotFoundException {
+        logger.info("Petición DELETE - Borrar odontólogo " + id);
+        odontologoService.eliminarOdontologo(id);
+        return ResponseEntity.ok("Odontólogo con id " + id + "eliminado exitosamente.");
+    }
+
 }

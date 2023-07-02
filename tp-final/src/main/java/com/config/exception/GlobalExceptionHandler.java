@@ -10,24 +10,24 @@ import java.util.logging.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	
-	private static final Logger logger = Logger.getLogger(GlobalExceptionHandler.class.getName());
-	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> todosErrores(Exception ex, WebRequest req) {
-		logger.warning(ex.getMessage());
-		return new ResponseEntity("Error " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	@ExceptionHandler({ResourceNotFoundException.class})
-	public ResponseEntity<String> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
-		logger.warning(ex.getMessage());
-		return ResponseEntity.badRequest().body("Hubo un error, por favor intente con un ID válido.");
-	}
-	
-	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<String> badRequestExceptionHandler(BadRequestException ex) {
-		logger.warning(ex.getMessage());
-		return ResponseEntity.badRequest().body("Petición incorrecta. Por favor intente nuevamente.");
-	}
+
+    private static final Logger logger = Logger.getLogger(GlobalExceptionHandler.class.getName());
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> todosErrores(Exception ex, WebRequest req) {
+        logger.warning(ex.getMessage());
+        return new ResponseEntity("Error " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<String> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+        logger.warning(ex.getMessage());
+        return ResponseEntity.badRequest().body("Hubo un error, por favor intente con un ID válido.");
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> badRequestExceptionHandler(BadRequestException ex) {
+        logger.warning(ex.getMessage());
+        return ResponseEntity.badRequest().body("Petición incorrecta. Por favor intente nuevamente.");
+    }
 }
